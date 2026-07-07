@@ -1,0 +1,19 @@
+{
+  "name": "concesionario-api",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "API REST para gestión de un concesionario de autos (vehículos, clientes, vendedores, ventas)",
+  "scripts": {
+    "start": "node src/server.js",
+    "dev": "nodemon src/server.js"
+  },
+  "dependencies": {
+    "express": "^4.19.2",
+    "mongoose": "^8.5.0",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.4"
+  }
+}
