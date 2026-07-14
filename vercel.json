@@ -1,12 +1,21 @@
 {
   "version": 2,
-  "builds": [
-    {
-      "src": "server.js",
-      "use": "@vercel/node"
+  "env": {
+    "NODE_ENV": "production"
+  },
+  "buildCommand": "cd concesionario/frontend && npm install && npm run build",
+  "outputDirectory": "concesionario/frontend/dist",
+  "functions": {
+    "server.js": {
+      "memory": 1024,
+      "maxDuration": 30
     }
-  ],
+  },
   "routes": [
+    {
+      "src": "/api/(.*)",
+      "status": 404
+    },
     {
       "src": "/(.*)",
       "dest": "server.js"
