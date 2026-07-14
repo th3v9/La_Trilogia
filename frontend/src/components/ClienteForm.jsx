@@ -1,0 +1,48 @@
+import { useState } from "react";
+
+function ClienteForm({ clienteInicial, onGuardar }) {
+  const [form, setForm] = useState(
+    clienteInicial || { rut: "", nombre: "", apellido: "", correo: "", telefono: "" }
+  );
+
+  const manejarCambio = (evento) => {
+    setForm({ ...form, [evento.target.name]: evento.target.value });
+  };
+
+  const manejarEnvio = (evento) => {
+    evento.preventDefault();
+    onGuardar(form);
+  };
+
+  return (
+    <form className="form" onSubmit={manejarEnvio}>
+      <div className="field">
+        <label>RUT</label>
+        <input name="rut" value={form.rut} onChange={manejarCambio} required />
+      </div>
+      <div className="field">
+        <label>Teléfono</label>
+        <input name="telefono" value={form.telefono} onChange={manejarCambio} required />
+      </div>
+      <div className="field">
+        <label>Nombre</label>
+        <input name="nombre" value={form.nombre} onChange={manejarCambio} required />
+      </div>
+      <div className="field">
+        <label>Apellido</label>
+        <input name="apellido" value={form.apellido} onChange={manejarCambio} required />
+      </div>
+      <div className="field field--full">
+        <label>Correo</label>
+        <input name="correo" type="email" value={form.correo} onChange={manejarCambio} required />
+      </div>
+      <div className="form-actions">
+        <button type="submit" className="btn btn-primary">
+          Guardar cliente
+        </button>
+      </div>
+    </form>
+  );
+}
+
+export default ClienteForm;
