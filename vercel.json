@@ -1,10 +1,15 @@
 {
-  "buildCommand": "cd concesionario/frontend && npm install && npm run build",
-  "outputDirectory": "concesionario/frontend/dist",
-  "rewrites": [
+  "version": 2,
+  "builds": [
     {
-      "source": "/:path((?!.*\\.).*)",
-      "destination": "/index.html"
+      "src": "server.js",
+      "use": "@vercel/node"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/(.*)",
+      "dest": "server.js"
     }
   ]
 }
