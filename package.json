@@ -1,16 +1,6 @@
 {
-  "name": "la-trilogia",
-  "version": "1.0.0",
   "private": true,
-  "type": "module",
   "scripts": {
-    "build": "cd concesionario/frontend && npm install && npm run build",
-    "start": "node server.js"
-  },
-  "dependencies": {
-    "express": "^4.19.2"
-  },
-  "engines": {
-    "node": "18"
+    "build": "cd concesionario/frontend && npm install && npm run build"
   }
 }
