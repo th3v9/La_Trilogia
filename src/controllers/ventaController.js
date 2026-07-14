@@ -1,5 +1,7 @@
 import Venta from "../models/Venta.js";
 import Vehiculo from "../models/Vehiculo.js";
+import Cliente from "../models/Cliente.js";
+import Vendedor from "../models/Vendedor.js";
 
 export const obtenerVentas = async (req, res, next) => {
   try {
@@ -28,9 +30,7 @@ export const obtenerVentaPorId = async (req, res, next) => {
   }
 };
 
-// Crear una venta implica una regla de negocio real del concesionario:
-// no se puede vender dos veces el mismo vehículo. Por eso, además de
-// insertar el documento, verificamos y actualizamos el estado del auto.
+// Antes de crear la venta se verifican las referencias y la disponibilidad del vehículo.
 export const crearVenta = async (req, res, next) => {
   try {
     const vehiculo = await Vehiculo.findById(req.body.vehiculo);
@@ -43,10 +43,23 @@ export const crearVenta = async (req, res, next) => {
       });
     }
 
+    const cliente = await Cliente.findById(req.body.cliente);
+    if (!cliente) {
+      return res.status(404).json({ mensaje: "Cliente no encontrado" });
+    }
+
+    const vendedor = await Vendedor.findById(req.body.vendedor);
+    if (!vendedor) {
+      return res.status(404).json({ mensaje: "Vendedor no encontrado" });
+    }
+
     const venta = await Venta.create(req.body);
 
-    vehiculo.estado = "vendido";
-    await vehiculo.save();
+    await Vehiculo.findByIdAndUpdate(
+      vehiculo._id,
+      { estado: "vendido" },
+      { new: true, runValidators: true }
+    );
 
     res.status(201).json(venta);
   } catch (error) {
@@ -69,8 +82,7 @@ export const actualizarVenta = async (req, res, next) => {
   }
 };
 
-// Si se elimina una venta (por ejemplo, se anuló), el vehículo vuelve
-// a quedar disponible para una nueva venta.
+// Al eliminar una venta, el vehículo vuelve a quedar disponible.
 export const eliminarVenta = async (req, res, next) => {
   try {
     const venta = await Venta.findByIdAndDelete(req.params.id);
@@ -84,9 +96,7 @@ export const eliminarVenta = async (req, res, next) => {
   }
 };
 
-// Reporte: cantidad de ventas y monto total vendido, por vendedor.
-// Combina $group + $lookup + $unwind + $project, más completo que un
-// solo populate() porque agrega y calcula totales al mismo tiempo.
+// Reporte de cantidad de ventas y monto total por vendedor.
 export const ventasPorVendedor = async (req, res, next) => {
   try {
     const resultado = await Venta.aggregate([

@@ -1,49 +1,69 @@
 # Concesionario de Autos — API
 
-API REST para la gestión de un concesionario de autos: inventario de vehículos, clientes, vendedores y ventas. Construida con Node.js, Express, MongoDB Atlas y Mongoose.
+API REST para gestionar vehículos, clientes, vendedores y ventas de un concesionario. El backend utiliza Node.js, Express, MongoDB Atlas y Mongoose.
 
 ## Modelo de datos
 
-| Colección   | Campos principales                                              | Relación |
-|-------------|-------------------------------------------------------------------|----------|
-| `vehiculos` | patente, marca, modelo, anio, precio, kilometraje, estado          | — |
-| `clientes`  | rut, nombre, apellido, correo, telefono                            | — |
-| `vendedores`| rut, nombre, apellido, correo, sucursal                             | — |
-| `ventas`    | vehiculo (ref), cliente (ref), vendedor (ref), precioFinal, formaPago, fecha | referencia a las 3 colecciones anteriores |
+| Colección | Campos principales | Relación |
+|---|---|---|
+| `vehiculos` | patente, marca, modelo, anio, precio, kilometraje, estado | — |
+| `clientes` | rut, nombre, apellido, correo, telefono | — |
+| `vendedores` | rut, nombre, apellido, correo, sucursal | — |
+| `ventas` | vehiculo, cliente, vendedor, precioFinal, formaPago, fecha | referencias a las otras colecciones |
 
-`estado` de un vehículo: `disponible` → `vendido` (se actualiza automáticamente al crear una venta) → puede volver a `disponible` si la venta se elimina.
+El estado de un vehículo cambia de `disponible` a `vendido` cuando se crea una venta. Si la venta se elimina, el vehículo vuelve a quedar `disponible`.
 
 ## Instalación
 
+1. Ejecutar:
+
 ```bash
 npm install
-cp .env.example .env   # completar con tus credenciales de MongoDB Atlas
+```
+
+2. Crear un archivo `.env` tomando como ejemplo `.env.example` y completar la conexión de MongoDB Atlas.
+
+3. Iniciar el servidor:
+
+```bash
 npm run dev
 ```
 
 ## Endpoints
 
-| Recurso     | Endpoint base       |
-|-------------|---------------------|
-| Vehículos   | /api/vehiculos       |
-| Clientes    | /api/clientes         |
-| Vendedores  | /api/vendedores       |
-| Ventas      | /api/ventas           |
+| Recurso | Endpoint base |
+|---|---|
+| Vehículos | `/api/vehiculos` |
+| Clientes | `/api/clientes` |
+| Vendedores | `/api/vendedores` |
+| Ventas | `/api/ventas` |
 
-Cada recurso soporta GET, GET/:id, POST, PUT/:id, DELETE/:id.
+Cada recurso tiene las operaciones GET, GET por ID, POST, PUT y DELETE.
 
-Reportes adicionales:
-- `GET /api/vehiculos/estadisticas/por-marca` → cantidad de vehículos disponibles por marca.
-- `GET /api/ventas/reportes/por-vendedor` → cantidad de ventas y monto total vendido por vendedor (usa `$group` + `$lookup`).
+Reportes:
 
-## Ejemplo de flujo de venta
+- `GET /api/vehiculos/estadisticas/por-marca`
+- `GET /api/ventas/reportes/por-vendedor`
 
-1. `POST /api/vehiculos` → crear un vehículo (queda `disponible`).
-2. `POST /api/vendedores` y `POST /api/clientes` → crear vendedor y cliente.
-3. `POST /api/ventas` con los tres `_id` anteriores → el vehículo pasa a `vendido` automáticamente.
-4. Intentar crear otra venta con el mismo vehículo devuelve `400` porque ya no está `disponible`.
+## Flujo básico de una venta
 
-## Deploy
+1. Crear un vehículo.
+2. Crear un cliente y un vendedor.
+3. Crear la venta utilizando los `_id` de los tres documentos.
+4. El backend verifica que las referencias existan y que el vehículo esté disponible.
+5. Al registrar la venta, el vehículo cambia a estado `vendido`.
 
-- Backend: Render (Build: `npm install`, Start: `npm start`)
-- Base de datos: MongoDB Atlas
+## Despliegue
+
+- Backend: Render.
+- Base de datos: MongoDB Atlas.
+- Frontend: pendiente de incorporación y despliegue en Vercel.
+
+## Evidencias pendientes para la entrega
+
+- URL pública del backend y del frontend.
+- Diagrama de arquitectura.
+- Evidencias de configuración de MongoDB Atlas.
+- Proyecto Jira con historias de usuario y tareas.
+- Estrategia de ramas y participación de todos los integrantes.
+- Pruebas del CRUD ejecutadas con Thunder Client o Postman.
