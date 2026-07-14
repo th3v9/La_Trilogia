@@ -1,8 +1,20 @@
-# Concesionario de Autos — API
+# Concesionario de Autos
 
-API REST para gestionar vehículos, clientes, vendedores y ventas de un concesionario. El backend utiliza Node.js, Express, MongoDB Atlas y Mongoose.
+Proyecto fullstack para la gestión de un concesionario de autos. Incluye un backend REST con Node.js, Express, MongoDB Atlas y Mongoose, más un frontend en React + Vite para administrar vehículos, clientes, vendedores y ventas.
 
-## Modelo de datos
+## Estructura
+
+```text
+.
+├── src/           # API backend
+└── frontend/      # interfaz React + Vite
+```
+
+## Backend
+
+La API expone CRUD para vehículos, clientes, vendedores y ventas. También incluye reportes agregados por marca y por vendedor.
+
+### Modelo de datos
 
 | Colección | Campos principales | Relación |
 |---|---|---|
@@ -13,23 +25,15 @@ API REST para gestionar vehículos, clientes, vendedores y ventas de un concesio
 
 El estado de un vehículo cambia de `disponible` a `vendido` cuando se crea una venta. Si la venta se elimina, el vehículo vuelve a quedar `disponible`.
 
-## Instalación
-
-1. Ejecutar:
+### Instalación y ejecución
 
 ```bash
 npm install
-```
-
-2. Crear un archivo `.env` tomando como ejemplo `.env.example` y completar la conexión de MongoDB Atlas.
-
-3. Iniciar el servidor:
-
-```bash
+cp .env.example .env
 npm run dev
 ```
 
-## Endpoints
+### Endpoints
 
 | Recurso | Endpoint base |
 |---|---|
@@ -45,6 +49,28 @@ Reportes:
 - `GET /api/vehiculos/estadisticas/por-marca`
 - `GET /api/ventas/reportes/por-vendedor`
 
+## Frontend
+
+El frontend está en `frontend/` y consume la API del backend para mostrar listados, formularios, edición y dashboard.
+
+### Instalación y ejecución
+
+```bash
+cd frontend
+npm install
+cp .env.example .env
+npm run dev
+```
+
+En desarrollo, el frontend debe apuntar al backend local mediante `VITE_API_URL`.
+
+### Build de producción
+
+```bash
+cd frontend
+npm run build
+```
+
 ## Flujo básico de una venta
 
 1. Crear un vehículo.
@@ -57,7 +83,7 @@ Reportes:
 
 - Backend: Render.
 - Base de datos: MongoDB Atlas.
-- Frontend: pendiente de incorporación y despliegue en Vercel.
+- Frontend: Vercel.
 
 ## Evidencias pendientes para la entrega
 
