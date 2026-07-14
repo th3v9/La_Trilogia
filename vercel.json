@@ -1,19 +1,10 @@
 {
-  "builds": [
-    {
-      "src": "concesionario/frontend/package.json",
-      "use": "@vercel/static-build",
-      "config": {
-        "distDir": "dist",
-        "buildCommand": "npm run build"
-      }
-    }
-  ],
-  "routes": [
-    {
-      "src": "/(.*)",
-      "dest": "/index.html",
-      "status": 200
-    }
+  "buildCommand": "bash build.sh",
+  "outputDirectory": "concesionario/frontend/dist",
+  "public": "concesionario/frontend/dist",
+  "cleanUrls": true,
+  "trailingSlash": false,
+  "rewrites": [
+    { "source": "/(.*)", "destination": "/index.html" }
   ]
 }
